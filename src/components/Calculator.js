@@ -4,13 +4,13 @@ import { operators } from './operators'
 import './Calculator.css';
 
 function Calculator() {
-    const [currentVal, setCurrentVal] = useState(() => {return 0})
-    const [formula, setFormula] = useState(() => {return 0})
+    const [currentVal, setCurrentVal] = useState(() => {return '0'})
+    const [formula, setFormula] = useState(() => {return '0'})
     const [decimalFlag, setDecimalFlag] = useState(() => {return false})
 
     const handleNumbers = (e) => {
         const value = e.target.value
-        if (currentVal == '0') {
+        if (currentVal === '0') {
             setFormula(value)
             setCurrentVal(value)
         }
@@ -21,8 +21,8 @@ function Calculator() {
     }
 
     const handleClear = () => {
-        setCurrentVal(0)
-        setFormula(0)
+        setCurrentVal('0')
+        setFormula('0')
         setDecimalFlag(false)
     }
 
@@ -51,7 +51,7 @@ function Calculator() {
     const handleOperators = (e) => {
         const value = e.target.value
         const operatorRegex = /[x/+-]$/
-        const negativeRegex = /([x/+])\-$/
+        const negativeRegex = /([x/+])-$/
         
 
         if (!operatorRegex.test(formula)) {
@@ -72,7 +72,7 @@ function Calculator() {
     const handleNegativeSign = (e) => {
         const value = e.target.value
         const operatorRegex = /[x/+-]$/
-        const negativeRegex = /([x/+])\-$/
+        const negativeRegex = /([x/+])-$/
         
         if (!operatorRegex.test(formula)) {
             setFormula((prevFormula => prevFormula + value))
