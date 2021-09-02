@@ -10,7 +10,7 @@ function Calculator() {
 
     const handleNumbers = (e) => {
         const value = e.target.value
-        if (currentVal === '0') {
+        if (formula === '0') {
             setFormula(value)
             setCurrentVal(value)
         }
@@ -91,19 +91,87 @@ function Calculator() {
     }
 
     const handleEvaluate = () => {
-        const operatorRegex = /[x/+-]$/
+        const operatorRegex = /[x/+-.]$/
         let expression = formula
         
         if (operatorRegex.test(expression)) {
             expression = expression.slice(0, -1)
         }
 
-        const answer = Math.round(1000000000000 * 
-            eval(expression.replace(/x/g, '*'))) / 1000000000000;
+        const evalRegex = /(-)?(\d+[.])?(\d+)([x+/-])(-)?(\d+)([.]\d+)?/
+
+        while (evalRegex.test(expression)) {
+            let operation = expression.match(evalRegex)[0]
+            let firstNumber = 0
+            let secondNumber = 0
+            let answer = 0
+            console.log(operation)
+            console.log(formula)
+            console.log(expression)
+
+            if (/(-)?(\d+[.])?(\d+)([x+/-])(-)(\d+)([.]\d+)?/.test(operation)) {
+
+                if (operation.includes('+')) {
+                    firstNumber = operation.slice(0, operation.indexOf('+'))
+                    secondNumber = operation.slice(operation.indexOf('-') + 1)
+                    answer = ((1000000000000 * firstNumber) - (1000000000000 * secondNumber)) / 1000000000000
+                }
+                else if (operation.includes('x')) {
+                    firstNumber = operation.slice(0, operation.indexOf('x'))
+                    secondNumber = operation.slice(operation.indexOf('x') + 1)
+                    answer = ((1000000000000 * firstNumber) / 1000000000000)  * ((1000000000000 * secondNumber) / 1000000000000)
+                }
+                else if (operation.includes('/')) {
+                    firstNumber = operation.slice(0, operation.indexOf('/'))
+                    secondNumber = operation.slice(operation.indexOf('/') + 1)
+                    answer = (1000000000000 * firstNumber) / (1000000000000 * secondNumber)
+                }
+            }
+
+            if (/(-)?(\d+[.])?(\d+)([x+/-])(\d+)([.]\d+)?/.test(operation)) {
+
+                if (operation.includes('+')) {
+                    firstNumber = operation.slice(0, operation.indexOf('+'))
+                    secondNumber = operation.slice(operation.indexOf('+') + 1)
+                    answer = ((1000000000000 * firstNumber) + (1000000000000 * secondNumber)) / 1000000000000
+                }
+
+                else if (operation.includes('-')) {
+                    firstNumber = operation.slice(0, operation.indexOf('-'))
+                    secondNumber = operation.slice(operation.indexOf('-') + 1)
+                    answer = ((1000000000000 * firstNumber) - (1000000000000 * secondNumber)) / 1000000000000
+                }
+    
+                else if (operation.includes('x')) {
+                    firstNumber = operation.slice(0, operation.indexOf('x'))
+                    secondNumber = operation.slice(operation.indexOf('x') + 1)
+                    answer = ((1000000000000 * firstNumber) / 1000000000000)  * ((1000000000000 * secondNumber) / 1000000000000)
+                }
+    
+                else if (operation.includes('/')) {
+                    firstNumber = operation.slice(0, operation.indexOf('/'))
+                    secondNumber = operation.slice(operation.indexOf('/') + 1)
+                    answer = (1000000000000 * firstNumber) / (1000000000000 * secondNumber)
+                }
+
+            }
+
+            answer = answer.toString()
+            expression = expression.replace(evalRegex, answer)
+        }
+
+        setCurrentVal(expression)
+        setFormula(expression)
+        setDecimalFlag(prevFlag => (/[.]/g.test(formula)
+        ? prevFlag = true
+        : prevFlag = false))
+
+        /* const answer = Math.round(1000000000000 * 
+            eval(expression.replace(/x/g, '*'))) / 1000000000000; */
         
-        setFormula(answer.toString())
+        /* setFormula(answer.toString())
         setCurrentVal(answer.toString())
-        setDecimalFlag(false)
+        setDecimalFlag(false) */
 
     }
 
